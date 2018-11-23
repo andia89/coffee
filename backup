@@ -1,0 +1,10 @@
+#!/bin/bash
+#rsync -r  /home/pi/coffee/scripts/coffee.db /mnt/samba0/general/CoffeList/coffee.db
+#rsync -r --remove-source-files --progress /home/pi/coffee/pictures/* /mnt/samba0/general/CoffeList/photos/
+rsync -avz --progress /home/pi/coffee/scripts/*.db andreas@128.131.61.12:/home/andreas/Diverses/coffee_test/
+rsync -avz  --remove-source-files --progress /home/pi/coffee/pictures/ andreas@128.131.61.12:/home/andreas/Diverses/coffee_pictures/
+cd /home/pi/coffee/pictures/
+find . -type d -empty -delete
+
+cd /home/pi/coffee/
+rsync -avz --progress --exclude 'scripts/training.db' --exclude 'scripts/coffee.db' --exclude 'scripts/classifier.pkl' /home/pi/ andreas@128.131.61.12:/home/andreas/Diverses/coffee_test/home_backup/
