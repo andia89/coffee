@@ -20,6 +20,8 @@ conn = sqlite3.connect(filename)
 
 while not len(idi):
     idi = conn.execute("SELECT COFFEEID FROM COFFEE WHERE NAME='%s'"%(name)).fetchall()
+    if len(idi):
+        break
     print("Name does not exist in database")
     while not name2:
         name2 = input("Name: ")
@@ -70,8 +72,7 @@ while not comment:
     else:
         comment = str(comment)
 
-
-conn.execute("INSERT INTO INPUT (MONEY, DAT, COMMENT, COFFEEID) VALUES (%f, '%s', 's', %i)"%(money, date, comment, idi[0][0]))
+conn.execute("INSERT INTO INPUT (MONEY, DAT, COMMENT, COFFEEID) VALUES (%f, '%s', '%s', %i)"%(money, date, comment, int(idi[0][0])))
 
 conn.commit()
 conn.close()
