@@ -11,6 +11,7 @@ idi = []
 money = None
 date = ""
 comment = ""
+name2 = ""
 
 while not name:
     name = input("Name: ")
@@ -20,8 +21,10 @@ conn = sqlite3.connect(filename)
 while not len(idi):
     idi = conn.execute("SELECT COFFEEID FROM COFFEE WHERE NAME='%s'"%(name)).fetchall()
     print("Name does not exist in database")
-    while not name:
-        name = input("Name: ")
+    while not name2:
+        name2 = input("Name: ")
+    name = str(name2)
+    name2 = ""
 
 if len(idi)>1:
     print("Name exists more than once. Try also the first name")
