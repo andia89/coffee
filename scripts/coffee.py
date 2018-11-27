@@ -97,4 +97,4 @@ while tmain.is_alive():
     cancel.cancel(cont_value)
     time.sleep(0.5)
 
-cont.value = 0
+cont_value.value = 0
