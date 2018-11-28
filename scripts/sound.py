@@ -8,7 +8,7 @@ import sys
 import multiprocessing
 import peakutils
 import sqlite3
-from sklearn.externals import joblib
+import pickle
 
 RATE = 44100
 FPB = 441*3
@@ -31,7 +31,8 @@ class Sound:
         self.training = True
         self.recorded_data = numpy.zeros((self.ctr_end+1)*FPB)
         try:
-            self.mlp = joblib.load('classifier.pkl')
+            with open('classifier.pkl', 'rb') as f:
+                    self.mlp = pickle.load(f)
             self.classifier = True
         except:
             self.classifier = False
