@@ -51,6 +51,7 @@ class Sound:
             print e
             if self.log:
                 self.log.exception("Exception in sound.py")
+                self.log(e)
         finally:
             self.stop_stream()
 

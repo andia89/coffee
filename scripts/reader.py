@@ -196,6 +196,7 @@ class Reader():
         except Exception, e:
             print e
             self.app_log.exception("Exception in reader.py")
+            self.app_log.exception(e)
             cont_value.value = False
         finally:
             GPIO.cleanup()

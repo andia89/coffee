@@ -43,9 +43,11 @@ class Camera:
                     take_photo.value = 0
                 time.sleep(0.5)
             self.camera.stop_preview()
+            sadf
         except Exception, e:
             print e
             self.log.exception("Exception in camera.py")
+            self.log.excpetion(e)
 
 
     def capture(self):

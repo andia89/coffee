@@ -28,3 +28,4 @@ class Trigger:
         except Exception, e:
             print e
             self.log.exception("Exception in trigger.py")
+            self.log.exception(e)

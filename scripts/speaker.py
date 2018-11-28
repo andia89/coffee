@@ -72,7 +72,8 @@ class Buzzer:
                     time.sleep(0.5)
         except Exception, e:
             print e
-            self.log.exception("Error in speaker.py")   
+            self.log.exception("Error in speaker.py")
+            self.log.exception(e)
 
 
 if __name__ == "__main__":

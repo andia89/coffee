@@ -28,6 +28,7 @@ class Blink:
         except Exception, e:
             print e
             self.log.exception("Exception in blink.py")
+            self.log.exception(e)
         finally:
             GPIO.cleanup()
 
