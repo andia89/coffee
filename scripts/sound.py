@@ -28,7 +28,7 @@ class Sound:
         self.thres = 1.
         self.corr = 0.
         self.log = log
-        self.training = False
+        self.training = True
         self.recorded_data = numpy.zeros((self.ctr_end+1)*FPB)
         try:
             self.mlp = joblib.load('classifier.pkl')
