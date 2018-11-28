@@ -30,7 +30,11 @@ class Sound:
         self.log = log
         self.training = False
         self.recorded_data = numpy.zeros((self.ctr_end+1)*FPB)
-        self.mlp = joblib.load('classifier.pkl')
+        try:
+            self.mlp = joblib.load('classifier.pkl')
+            self.classifier = True
+        except:
+            self.classifier = False
 
     def stop_stream(self):
         self.stream.close()
@@ -66,8 +70,9 @@ class Sound:
         self.appended_data[-FPB:] = audio_data
         if numpy.any(abs(self.appended_data[20000:35000]) >= self.thres) and abs(self.coffee_time-time.time()) > 10:
             self.sound_arr = self.appended_data.copy()
-            if self.mlp.predict(abs(self.sound_arr).reshape(1, -1)):
-                self.match.value = 1
+            if self.classifier:
+                if self.mlp.predict(abs(self.sound_arr).reshape(1, -1)):
+                    self.match.value = 1
             if self.training:
                 dated = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))                
                 conn = sqlite3.connect(trainingfile)
