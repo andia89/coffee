@@ -28,7 +28,7 @@ class Sound:
         self.thres = 1.
         self.corr = 0.
         self.log = log
-        self.training = True
+        self.training = False
         self.recorded_data = numpy.zeros((self.ctr_end+1)*FPB)
         try:
             with open('classifier.pkl', 'rb') as f:
