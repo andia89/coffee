@@ -56,3 +56,5 @@ docs/_build/
 *.pkl
 
 pictures/
+
+.stfolder
