@@ -43,7 +43,7 @@ class Buzzer:
         wiringpi.digitalWrite(SoundPin, 0)
         self.message = encodeToMorse(message)
 
-    def main(self, stolen, cont):
+    def main(self, stolen, overdue, cont):
         try:
             self.setup()
             wiringpi.digitalWrite(SoundPin, 0)
@@ -68,6 +68,11 @@ class Buzzer:
                         wiringpi.digitalWrite(SoundPin, 0)
                         time.sleep(pause)
                     time.sleep(pause*5)
+                else if overdue.value:
+                    wiringpi.digitalWrite(SoundPin, 1)
+                    time.sleep(10)
+                    wiringpi.digitalWrite(SoundPin, 0)
+                    overdue.value = 0
                 else:
                     time.sleep(0.5)
         except Exception, e:

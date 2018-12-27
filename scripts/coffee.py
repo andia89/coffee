@@ -53,6 +53,7 @@ app_log.setLevel(logging.INFO)
 match_value = multiprocessing.Value('i', 0)
 blink_value = multiprocessing.Value('i', 0)
 photo_value = multiprocessing.Value('i', 0)
+overdue_value = multiprocesing.Value('i',0)
 cont_value = multiprocessing.Value('i', 1)
 
 cancel.reset()
@@ -76,12 +77,12 @@ trigger = trigger.Trigger(app_log)
 use_cam = True
 
 
-tmain = multiprocessing.Process(target=reader.main, name='reading', args=(match_value, blink_value, photo_value, cont_value))
+tmain = multiprocessing.Process(target=reader.main, name='reading', args=(match_value, blink_value, photo_value, overdue_value, cont_value))
 if soundcard:
     tsound = multiprocessing.Process(target=soundrec.main, name='sound', args=(match_value, cont_value))
 tcamera = multiprocessing.Process(target=cam.main, name='camera', args=(photo_value, cont_value))
 #tblink = multiprocessing.Process(target=blinker.main, name='blinker', args=(blink_value, cont_value))
-tspeaker = multiprocessing.Process(target=speaker.main, name='speaker', args=(blink_value, cont_value))
+tspeaker = multiprocessing.Process(target=speaker.main, name='speaker', args=(blink_value, overdue_value, cont_value))
 ttrigger = multiprocessing.Process(target=trigger.main, name='trigger', args=(match_value, cont_value))
 
 if soundcard:

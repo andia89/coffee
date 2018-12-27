@@ -75,12 +75,13 @@ class Reader():
                 self.chip_detected = uid
                 error_cont = False
         
-    def main(self, match_value, blink_value, photo_value, cont_value):
+    def main(self, match_value, blink_value, photo_value, overdue_value, cont_value):
         try:
             self.setup()
             write_stolenfile("0")
             match_value.value = 0
             blink_value.value = 0
+            overdue_value.value = 0
             photo_value.value = 0
             start = 0
             offset_written = False
@@ -157,6 +158,7 @@ class Reader():
                         write_stolenfile('0')
                         blink_value.value = 0
                         match_value.value = 0
+                        overdue_value.value = 0
                         photo_value.value = 0
                         if coffeeid == -1:
                             print "%s - Hello, enjoy your coffee!" % timestr
@@ -172,6 +174,7 @@ class Reader():
                             if saldo < -99:
                                 message1 = u"WTF %s,\n\r"%(firstname)
                                 message2 = "pay %s cfs!"%(int(saldo))
+                                overdue_value.value = 1
                             self.lcd.write_string(message1 + message2)
                             if len(message2) <= self.lcd.lcd.cols:
                                 if saldo > 0:
