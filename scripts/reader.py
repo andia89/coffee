@@ -169,6 +169,9 @@ class Reader():
                             self.lcd.clear()
                             message1 = u"Hi %s,\n\r"%(firstname)
                             message2 = "Saldo: %i cfs "%(int(saldo))
+                            if saldo < -99:
+                                message1 = u"WTF %s,\n\r"%(firstname)
+                                message2 = "pay %s cfs!"%(int(saldo))
                             self.lcd.write_string(message1 + message2)
                             if len(message2) <= self.lcd.lcd.cols:
                                 if saldo > 0:
