@@ -68,7 +68,7 @@ class Buzzer:
                         wiringpi.digitalWrite(SoundPin, 0)
                         time.sleep(pause)
                     time.sleep(pause*5)
-                else if overdue.value:
+                elif overdue.value:
                     wiringpi.digitalWrite(SoundPin, 1)
                     time.sleep(10)
                     wiringpi.digitalWrite(SoundPin, 0)
