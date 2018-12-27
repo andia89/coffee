@@ -53,7 +53,7 @@ app_log.setLevel(logging.INFO)
 match_value = multiprocessing.Value('i', 0)
 blink_value = multiprocessing.Value('i', 0)
 photo_value = multiprocessing.Value('i', 0)
-overdue_value = multiprocesing.Value('i',0)
+overdue_value = multiprocessing.Value('i',0)
 cont_value = multiprocessing.Value('i', 1)
 
 cancel.reset()
