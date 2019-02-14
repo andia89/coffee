@@ -67,22 +67,27 @@ class Sound:
              return (audio_data, pyaudio.paContinue)
 
     def global_callback(self, in_data, frame_count, time_info, flag):
-        audio_data = numpy.fromstring(in_data, dtype=numpy.float32)
-        self.appended_data = numpy.roll(self.appended_data, -FPB)
-        self.appended_data[-FPB:] = audio_data
-        if numpy.any(abs(self.appended_data[20000:35000]) >= self.thres) and abs(self.coffee_time-time.time()) > 10:
-            self.sound_arr = self.appended_data.copy()
-            if self.classifier:
-                if self.mlp.predict(abs(self.sound_arr).reshape(1, -1)):
-                    self.match.value = 1
-            if self.training:
-                dated = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))                
-                conn = sqlite3.connect(trainingfile)
-                conn.execute('INSERT INTO STOLEN (DAT, STOLENARR) VALUES (?, ?)', (dated, sqlite3.Binary(self.sound_arr)))
-                conn.commit()
-                conn.close()
-            self.coffee_time = time.time()
-                        
+        try:
+            audio_data = numpy.fromstring(in_data, dtype=numpy.float32)
+            self.appended_data = numpy.roll(self.appended_data, -FPB)
+            self.appended_data[-FPB:] = audio_data
+            if numpy.any(abs(self.appended_data[20000:35000]) >= self.thres) and abs(self.coffee_time-time.time()) > 10:
+                self.sound_arr = self.appended_data.copy()
+                if self.classifier:
+                    if self.mlp.predict(abs(self.sound_arr).reshape(1, -1)):
+                        self.match.value = 1
+                if self.training:
+                    dated = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))                
+                    conn = sqlite3.connect(trainingfile)
+                    conn.execute('INSERT INTO STOLEN (DAT, STOLENARR) VALUES (?, ?)', (dated, sqlite3.Binary(self.sound_arr)))
+                    conn.commit()
+                    conn.close()
+                self.coffee_time = time.time()
+        except Exception, e:
+            print e
+            if self.log:
+                self.log.exception("Exception in sound.py")
+                self.log(e)
         return (audio_data, pyaudio.paContinue)
 
 if __name__ == "__main__":
