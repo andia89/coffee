@@ -47,7 +47,13 @@ class Sound:
             self.stream = self.p.open(format=pyaudio.paFloat32, channels=1, rate=RATE, input=True, frames_per_buffer=FPB, stream_callback=self.global_callback)
             self.stream.start_stream()
             while cont.value:
-                time.sleep(0.5)
+                if self.stream.is_active():
+                    time.sleep(0.5)
+                else:
+                    self.stream = self.p.open(format=pyaudio.paFloat32, channels=1, rate=RATE, input=True, frames_per_buffer=FPB, stream_callback=self.global_callback)
+                    self.stream.start_stream()
+                    time.sleep(0.5)
+
         except Exception, e:
             print e
             if self.log:
