@@ -1,4 +1,5 @@
 import sys
+import os
 import datetime
 import sqlite3
 
@@ -21,4 +22,4 @@ conn.execute("UPDATE COUNTER SET DAT='%s', COUNT=%i"%(date, int(offset_count-cou
 conn.commit()
 conn.close()
 
-
+os.system("python /home/pi/coffee/restart.py")

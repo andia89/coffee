@@ -24,6 +24,7 @@ class Sound:
         self.sound_array = None
         self.dummy_array = self.appended_data.copy()
         self.ctr = 0
+        self.previous_sample = numpy.array([0,0,0])
         self.ctr_end = 2000
         self.thres = 1.
         self.corr = 0.
@@ -42,14 +43,15 @@ class Sound:
         self.p.terminate()
 
     def main(self, match, cont):
+        self.stream = self.p.open(format=pyaudio.paFloat32, channels=1, rate=RATE, input=True, frames_per_buffer=FPB, stream_callback=self.global_callback)
+        self.stream.start_stream()
         try:
             self.match = match
-            self.stream = self.p.open(format=pyaudio.paFloat32, channels=1, rate=RATE, input=True, frames_per_buffer=FPB, stream_callback=self.global_callback)
-            self.stream.start_stream()
             while cont.value:
                 if self.stream.is_active():
                     time.sleep(0.5)
                 else:
+                    self.log.exception("Sound stream stopped")
                     self.stream = self.p.open(format=pyaudio.paFloat32, channels=1, rate=RATE, input=True, frames_per_buffer=FPB, stream_callback=self.global_callback)
                     self.stream.start_stream()
                     time.sleep(0.5)
@@ -58,9 +60,9 @@ class Sound:
             print e
             if self.log:
                 self.log.exception("Exception in sound.py")
-                self.log(e)
+                self.log.exception(e)
         finally:
-            self.stop_stream()
+            self.stream.stop_stream()
 
     def record_callback(self, in_data, frame_count, time_info, flag):
          audio_data = numpy.fromstring(in_data, dtype=numpy.float64)
@@ -73,8 +75,10 @@ class Sound:
              return (audio_data, pyaudio.paContinue)
 
     def global_callback(self, in_data, frame_count, time_info, flag):
-        try:
+        try: 
             audio_data = numpy.fromstring(in_data, dtype=numpy.float32)
+            if numpy.array_equal(audio_data[-3:], self.previous_sample):
+                self.log.exception("Seems the audio stream stopped")
             self.appended_data = numpy.roll(self.appended_data, -FPB)
             self.appended_data[-FPB:] = audio_data
             if numpy.any(abs(self.appended_data[20000:35000]) >= self.thres) and abs(self.coffee_time-time.time()) > 10:
@@ -89,11 +93,12 @@ class Sound:
                     conn.commit()
                     conn.close()
                 self.coffee_time = time.time()
+            self.previous_sample = audio_data[-3:].copy()    
         except Exception, e:
             print e
             if self.log:
                 self.log.exception("Exception in sound.py")
-                self.log(e)
+                self.log.exception(e)
         return (audio_data, pyaudio.paContinue)
 
 if __name__ == "__main__":
