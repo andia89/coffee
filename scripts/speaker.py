@@ -3,7 +3,7 @@ import time
 import multiprocessing
 
 SoundPin = 13
-message = "Federica..."
+message = "Resistance is futile. Pay your coffee!"
 dotlength = 0.1
 pause = dotlength
 
